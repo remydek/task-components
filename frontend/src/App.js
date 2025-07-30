@@ -225,7 +225,178 @@ const ParticleExplosion = ({ x, y, onComplete }) => {
   );
 };
 
+// Task Input Component - Apple Vision Pro Style
+const TaskInput = ({ onCreateTask }) => {
+  const [text, setText] = useState('');
+  const [priority, setPriority] = useState('LOW');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedColor, setSelectedColor] = useState('yellow');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
+  const colors = [
+    { name: 'red', color: 'bg-red-500' },
+    { name: 'teal', color: 'bg-teal-500' },
+    { name: 'blue', color: 'bg-blue-500' },
+    { name: 'green', color: 'bg-green-500' },
+    { name: 'yellow', color: 'bg-yellow-500' },
+    { name: 'pink', color: 'bg-pink-500' },
+    { name: 'lightblue', color: 'bg-sky-500' },
+    { name: 'purple', color: 'bg-purple-500' }
+  ];
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
+
+    onCreateTask({
+      text: text.trim(),
+      priority,
+      color: selectedColor,
+      date: selectedDate || null,
+      x: Math.random() * (window.innerWidth - 400) + 50,
+      y: Math.random() * (window.innerHeight - 300) + 100
+    });
+
+    setText('');
+    setSelectedDate('');
+    setShowDatePicker(false);
+    setShowColorPicker(false);
+  };
+
+  const PriorityIcon = () => {
+    if (priority === 'HIGH') {
+      return (
+        <div className="w-8 h-8 bg-red-500 rounded-xl flex items-center justify-center">
+          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+          </svg>
+        </div>
+      );
+    } else {
+      return (
+        <div className="w-8 h-8 bg-blue-500 rounded-xl flex items-center justify-center">
+          <div className="w-3 h-3 bg-white rounded-full"></div>
+        </div>
+      );
+    }
+  };
+
+  const PaintbrushIcon = () => (
+    <div className="relative">
+      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+      </svg>
+      <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${colors.find(c => c.name === selectedColor)?.color} border border-black`}></div>
+    </div>
+  );
+
+  return (
+    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
+      <form onSubmit={handleSubmit} className="flex items-center bg-black/80 backdrop-blur-xl rounded-3xl p-4 border border-white/10 shadow-2xl">
+        {/* Plus Icon */}
+        <div className="flex-shrink-0 mr-6">
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+        </div>
+
+        {/* Main Input */}
+        <input
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="What's important today?"
+          className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-xl font-light mr-8"
+        />
+
+        {/* Controls */}
+        <div className="flex items-center space-x-6">
+          {/* Priority Toggle */}
+          <div className="flex items-center space-x-3">
+            <span className="text-gray-300 text-sm font-medium">Priority</span>
+            <button
+              type="button"
+              onClick={() => setPriority(priority === 'LOW' ? 'HIGH' : 'LOW')}
+              className="transition-transform hover:scale-105"
+            >
+              <PriorityIcon />
+            </button>
+          </div>
+
+          {/* Date Picker */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowDatePicker(!showDatePicker)}
+              className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+            >
+              <CalendarIcon className="w-6 h-6 text-white" />
+            </button>
+            
+            {showDatePicker && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="absolute bottom-full mb-2 right-0 bg-black/90 backdrop-blur-xl rounded-xl p-3 border border-white/20"
+              >
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="bg-transparent text-white border border-white/20 rounded-lg px-2 py-1"
+                />
+              </motion.div>
+            )}
+          </div>
+
+          {/* Color Picker */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowColorPicker(!showColorPicker)}
+              className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+            >
+              <PaintbrushIcon />
+            </button>
+            
+            {showColorPicker && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="absolute bottom-full mb-2 right-0 bg-black/90 backdrop-blur-xl rounded-xl p-3 border border-white/20"
+              >
+                <div className="grid grid-cols-4 gap-2">
+                  {colors.map(color => (
+                    <button
+                      key={color.name}
+                      type="button"
+                      onClick={() => setSelectedColor(color.name)}
+                      className={`w-8 h-8 rounded-full ${color.color} transition-transform hover:scale-110 ${
+                        selectedColor === color.name ? 'ring-2 ring-white ring-offset-2 ring-offset-black/50' : ''
+                      }`}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={!text.trim()}
+            className="p-3 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-colors"
+          >
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 // Main App Component
 function App() {
