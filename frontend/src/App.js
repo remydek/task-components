@@ -7,7 +7,7 @@ import './App.css';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Task Card Component with Apple Vision Pro design
+// Task Card Component - Optimized for Speed
 const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -91,26 +91,26 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
   }, [isDragging, isResizing, dragStart, resizeStart, task.id, onUpdate]);
 
   return (
-    <motion.div
+    <div
       className={`absolute select-none cursor-move task-card-container ${
-        isBlurred ? 'opacity-30 blur-sm' : ''
+        isBlurred ? 'opacity-30' : ''
       }`}
       style={{
         left: task.x,
         top: task.y,
         width: task.width,
         height: task.height,
+        transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+        transition: 'transform 0.1s ease'
       }}
       onMouseDown={handleMouseDown}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.2 }}
     >
       {/* Gradient border container */}
       <div className={`h-full p-[2px] rounded-3xl bg-gradient-to-br ${colorGradients[task.color]}`}>
         {/* Inner card content */}
-        <div className="h-full bg-black/80 backdrop-blur-xl rounded-3xl overflow-hidden flex flex-col">
+        <div className="h-full bg-black/80 rounded-3xl overflow-hidden flex flex-col">
           {/* Header */}
           <div className="flex justify-between items-center p-4 pb-2">
             <div className="flex items-center text-gray-300 text-sm">
@@ -142,7 +142,7 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
           {/* Bottom action bar */}
           <div className="flex justify-between items-center p-4 pt-2">
             <button
-              className="action-button p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="action-button p-2 hover:bg-white/10 rounded-lg"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete(task.id);
@@ -153,7 +153,7 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
               </svg>
             </button>
             <button
-              className="action-button p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="action-button p-2 hover:bg-white/10 rounded-lg"
               onClick={(e) => {
                 e.stopPropagation();
                 onComplete(task.id);
@@ -167,22 +167,18 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
         </div>
       </div>
 
-      {/* Vision Pro-style resize handle */}
+      {/* Instant resize handle */}
       {isHovered && (
-        <motion.div
-          className="resize-handle absolute -bottom-3 -right-3 w-8 h-8 cursor-nw-resize"
+        <div
+          className="resize-handle absolute -bottom-3 -right-3 w-8 h-8 cursor-nw-resize opacity-100"
           onMouseDown={handleResizeStart}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.2 }}
         >
-          <div className="w-full h-full bg-white/15 backdrop-blur-sm rounded-full border border-white/20 flex items-center justify-center shadow-lg">
+          <div className="w-full h-full bg-white/15 rounded-full border border-white/20 flex items-center justify-center shadow-lg">
             <div className="w-3 h-3 bg-white/60 rounded-full"></div>
           </div>
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 
