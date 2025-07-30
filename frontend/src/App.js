@@ -221,7 +221,7 @@ const ParticleExplosion = ({ x, y, onComplete }) => {
   );
 };
 
-// Task Input Component - Apple Vision Pro Style
+// Task Input Component - Ultra Fast
 const TaskInput = ({ onCreateTask }) => {
   const [text, setText] = useState('');
   const [priority, setPriority] = useState('LOW');
@@ -289,7 +289,7 @@ const TaskInput = ({ onCreateTask }) => {
 
   return (
     <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4">
-      <form onSubmit={handleSubmit} className="flex items-center bg-black/80 backdrop-blur-xl rounded-3xl p-4 border border-white/10 shadow-2xl">
+      <form onSubmit={handleSubmit} className="flex items-center bg-black/80 rounded-3xl p-4 border border-white/10 shadow-2xl">
         {/* Plus Icon */}
         <div className="flex-shrink-0 mr-6">
           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
@@ -314,7 +314,6 @@ const TaskInput = ({ onCreateTask }) => {
             <button
               type="button"
               onClick={() => setPriority(priority === 'LOW' ? 'HIGH' : 'LOW')}
-              className="transition-transform hover:scale-105"
             >
               <PriorityIcon />
             </button>
@@ -325,24 +324,20 @@ const TaskInput = ({ onCreateTask }) => {
             <button
               type="button"
               onClick={() => setShowDatePicker(!showDatePicker)}
-              className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+              className="p-2 rounded-xl"
             >
               <CalendarIcon className="w-6 h-6 text-white" />
             </button>
             
             {showDatePicker && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="absolute bottom-full mb-2 right-0 bg-black/90 backdrop-blur-xl rounded-xl p-3 border border-white/20"
-              >
+              <div className="absolute bottom-full mb-2 right-0 bg-black/90 rounded-xl p-3 border border-white/20">
                 <input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
                   className="bg-transparent text-white border border-white/20 rounded-lg px-2 py-1"
                 />
-              </motion.div>
+              </div>
             )}
           </div>
 
@@ -351,30 +346,26 @@ const TaskInput = ({ onCreateTask }) => {
             <button
               type="button"
               onClick={() => setShowColorPicker(!showColorPicker)}
-              className="p-2 hover:bg-white/10 rounded-xl transition-colors"
+              className="p-2 rounded-xl"
             >
               <PaintbrushIcon />
             </button>
             
             {showColorPicker && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="absolute bottom-full mb-2 right-0 bg-black/90 backdrop-blur-xl rounded-xl p-3 border border-white/20"
-              >
+              <div className="absolute bottom-full mb-2 right-0 bg-black/90 rounded-xl p-3 border border-white/20">
                 <div className="grid grid-cols-4 gap-2">
                   {colors.map(color => (
                     <button
                       key={color.name}
                       type="button"
                       onClick={() => setSelectedColor(color.name)}
-                      className={`w-8 h-8 rounded-full ${color.color} transition-transform hover:scale-110 ${
+                      className={`w-8 h-8 rounded-full ${color.color} ${
                         selectedColor === color.name ? 'ring-2 ring-white ring-offset-2 ring-offset-black/50' : ''
                       }`}
                     />
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )}
           </div>
 
@@ -382,7 +373,7 @@ const TaskInput = ({ onCreateTask }) => {
           <button
             type="submit"
             disabled={!text.trim()}
-            className="p-3 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-colors"
+            className="p-3 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl"
           >
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
