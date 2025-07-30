@@ -7,7 +7,7 @@ import './App.css';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Task Card Component with Vision Pro-style resize handles
+// Task Card Component with Apple Vision Pro design
 const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -15,19 +15,30 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
-  const colorMap = {
-    red: 'border-red-500',
-    teal: 'border-teal-500',
-    blue: 'border-blue-500',
-    green: 'border-green-500',
-    yellow: 'border-yellow-500',
-    pink: 'border-pink-500',
-    lightblue: 'border-sky-500',
-    purple: 'border-purple-500'
+  const colorGradients = {
+    red: 'from-red-500 to-black',
+    teal: 'from-teal-500 to-black',
+    blue: 'from-blue-500 to-black',
+    green: 'from-green-500 to-black',
+    yellow: 'from-yellow-500 to-black',
+    pink: 'from-pink-500 to-black',
+    lightblue: 'from-sky-500 to-black',
+    purple: 'from-purple-500 to-black'
+  };
+
+  const priorityColors = {
+    red: 'text-red-400',
+    teal: 'text-teal-400',
+    blue: 'text-blue-400',
+    green: 'text-green-400',
+    yellow: 'text-yellow-400',
+    pink: 'text-pink-400',
+    lightblue: 'text-sky-400',
+    purple: 'text-purple-400'
   };
 
   const handleMouseDown = (e) => {
-    if (e.target.closest('.resize-handle')) return;
+    if (e.target.closest('.resize-handle') || e.target.closest('.action-button')) return;
     
     setIsDragging(true);
     setDragStart({
@@ -81,9 +92,9 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
 
   return (
     <motion.div
-      className={`absolute task-card ${colorMap[task.color]} select-none cursor-move ${
+      className={`absolute select-none cursor-move task-card-container ${
         isBlurred ? 'opacity-30 blur-sm' : ''
-      } ${task.priority === 'HIGH' ? 'border-2' : 'border'}`}
+      }`}
       style={{
         left: task.x,
         top: task.y,
@@ -93,46 +104,81 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
       onMouseDown={handleMouseDown}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onDoubleClick={() => onComplete(task.id)}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        onDelete(task.id);
-      }}
       whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      <div className="h-full p-4 bg-black/20 backdrop-blur-lg rounded-2xl border-inherit overflow-hidden">
-        <div className="flex justify-between items-start mb-2">
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-            task.priority === 'HIGH' ? 'bg-red-500/20 text-red-300' : 'bg-gray-500/20 text-gray-300'
-          }`}>
-            {task.priority}
-          </span>
-          {task.date && (
-            <div className="flex items-center text-green-400 text-xs">
-              <div className="w-2 h-2 bg-green-400 rounded-full mr-1"></div>
-              {new Date(task.date).toLocaleDateString()}
+      {/* Gradient border container */}
+      <div className={`h-full p-[2px] rounded-3xl bg-gradient-to-br ${colorGradients[task.color]}`}>
+        {/* Inner card content */}
+        <div className="h-full bg-black/80 backdrop-blur-xl rounded-3xl overflow-hidden flex flex-col">
+          {/* Header */}
+          <div className="flex justify-between items-center p-4 pb-2">
+            <div className="flex items-center text-gray-300 text-sm">
+              <CalendarIcon className="w-4 h-4 mr-2" />
+              Today
             </div>
-          )}
+            {task.priority === 'HIGH' && (
+              <div className={`flex items-center text-xs font-medium ${priorityColors[task.color]}`}>
+                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                High
+              </div>
+            )}
+          </div>
+
+          {/* Main content */}
+          <div className="flex-1 px-4 py-2">
+            <p className="text-white text-lg leading-relaxed break-words font-light">
+              {task.text}
+            </p>
+            {task.date && (
+              <div className="mt-3 text-gray-400 text-xs">
+                Due: {new Date(task.date).toLocaleDateString()}
+              </div>
+            )}
+          </div>
+
+          {/* Bottom action bar */}
+          <div className="flex justify-between items-center p-4 pt-2">
+            <button
+              className="action-button p-2 hover:bg-white/10 rounded-lg transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(task.id);
+              }}
+            >
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+            <button
+              className="action-button p-2 hover:bg-white/10 rounded-lg transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onComplete(task.id);
+              }}
+            >
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
-        
-        <p className="text-white text-sm leading-relaxed break-words">
-          {task.text}
-        </p>
       </div>
 
       {/* Vision Pro-style resize handle */}
       {isHovered && (
         <motion.div
-          className="resize-handle absolute -bottom-2 -right-2 w-6 h-6 cursor-nw-resize"
+          className="resize-handle absolute -bottom-3 -right-3 w-8 h-8 cursor-nw-resize"
           onMouseDown={handleResizeStart}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.2 }}
         >
-          <div className="w-full h-full bg-white/20 backdrop-blur-sm rounded-full border border-white/30 flex items-center justify-center">
-            <div className="w-2 h-2 bg-white/50 rounded-full"></div>
+          <div className="w-full h-full bg-white/15 backdrop-blur-sm rounded-full border border-white/20 flex items-center justify-center shadow-lg">
+            <div className="w-3 h-3 bg-white/60 rounded-full"></div>
           </div>
         </motion.div>
       )}
