@@ -17,16 +17,29 @@ body {
   background: #000;
 }
 
-.task-card {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+.task-card-container {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.task-card:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+.task-card-container:hover {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5), 
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 0 40px rgba(0, 0, 0, 0.3);
 }
 
 .resize-handle {
   z-index: 10;
+  backdrop-filter: blur(20px);
+}
+
+.action-button {
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Custom scrollbar for any overflow areas */
@@ -48,13 +61,17 @@ body {
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* Glassmorphism effects */
+/* Enhanced glassmorphism effects */
 .backdrop-blur-lg {
   backdrop-filter: blur(16px);
 }
 
 .backdrop-blur-sm {
   backdrop-filter: blur(4px);
+}
+
+.backdrop-blur-xl {
+  backdrop-filter: blur(24px);
 }
 
 /* Animation for focus mode */
@@ -64,6 +81,18 @@ body {
 
 .blur-sm {
   filter: blur(2px);
+}
+
+/* Premium gradient border effect */
+.task-card-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, currentColor, transparent 50%, rgba(0, 0, 0, 0.8));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
 }
 
 /* Custom date input styling */
@@ -78,4 +107,18 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
+}
+
+/* Vision Pro resize handle animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.resize-handle:hover > div {
+  animation: pulse-glow 2s infinite;
 }
