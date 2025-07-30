@@ -385,7 +385,7 @@ const TaskInput = ({ onCreateTask }) => {
   );
 };
 
-// Main App Component
+// Main App Component - Optimized for Speed
 function App() {
   const [tasks, setTasks] = useState([]);
   const [focusMode, setFocusMode] = useState(false);
@@ -420,28 +420,52 @@ function App() {
 
   const createTask = async (taskData) => {
     try {
+      // Optimistic update - instant UI response
+      const tempTask = {
+        ...taskData,
+        id: Date.now().toString(),
+        width: 350,
+        height: 200,
+        completed: false,
+        created_at: new Date().toISOString()
+      };
+      setTasks([tempTask, ...tasks]);
+
+      // Then update backend
       const response = await axios.post(`${API}/tasks`, taskData);
-      setTasks([response.data, ...tasks]);
+      setTasks(prevTasks => 
+        prevTasks.map(task => 
+          task.id === tempTask.id ? response.data : task
+        )
+      );
     } catch (error) {
       console.error('Error creating task:', error);
+      // Revert optimistic update on error
+      setTasks(tasks);
     }
   };
 
   const updateTask = async (taskId, updates) => {
+    // Instant UI update
+    setTasks(tasks.map(task => 
+      task.id === taskId ? { ...task, ...updates } : task
+    ));
+
+    // Background API update
     try {
       await axios.put(`${API}/tasks/${taskId}`, updates);
-      setTasks(tasks.map(task => 
-        task.id === taskId ? { ...task, ...updates } : task
-      ));
     } catch (error) {
       console.error('Error updating task:', error);
+      // Could add error handling/retry logic here
     }
   };
 
   const deleteTask = async (taskId) => {
+    // Instant removal
+    setTasks(tasks.filter(task => task.id !== taskId));
+
     try {
       await axios.delete(`${API}/tasks/${taskId}`);
-      setTasks(tasks.filter(task => task.id !== taskId));
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -451,16 +475,16 @@ function App() {
     const task = tasks.find(t => t.id === taskId);
     if (!task) return;
 
-    // Add explosion
+    // Instant explosion and removal
     setExplosions([...explosions, { 
       id: Date.now(), 
       x: task.x + task.width / 2, 
       y: task.y + task.height / 2 
     }]);
+    setTasks(tasks.filter(t => t.id !== taskId));
 
     try {
       await axios.post(`${API}/tasks/${taskId}/complete`);
-      setTasks(tasks.filter(t => t.id !== taskId));
     } catch (error) {
       console.error('Error completing task:', error);
     }
@@ -495,30 +519,26 @@ function App() {
       </div>
 
       {/* Tasks */}
-      <AnimatePresence>
-        {tasks.map(task => (
-          <TaskCard2D
-            key={task.id}
-            task={task}
-            onUpdate={updateTask}
-            onDelete={deleteTask}
-            onComplete={completeTask}
-            isBlurred={focusMode && !importantTasks.includes(task.id)}
-          />
-        ))}
-      </AnimatePresence>
+      {tasks.map(task => (
+        <TaskCard2D
+          key={task.id}
+          task={task}
+          onUpdate={updateTask}
+          onDelete={deleteTask}
+          onComplete={completeTask}
+          isBlurred={focusMode && !importantTasks.includes(task.id)}
+        />
+      ))}
 
       {/* Particle explosions */}
-      <AnimatePresence>
-        {explosions.map(explosion => (
-          <ParticleExplosion
-            key={explosion.id}
-            x={explosion.x}
-            y={explosion.y}
-            onComplete={() => removeExplosion(explosion.id)}
-          />
-        ))}
-      </AnimatePresence>
+      {explosions.map(explosion => (
+        <ParticleExplosion
+          key={explosion.id}
+          x={explosion.x}
+          y={explosion.y}
+          onComplete={() => removeExplosion(explosion.id)}
+        />
+      ))}
 
       {/* Task input */}
       <TaskInput onCreateTask={createTask} />
