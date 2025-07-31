@@ -85,3 +85,15 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 button {
   transition: none;
 }
+
+/* Drag particle animation */
+@keyframes fadeOutParticle {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) translateY(-20px);
+  }
+}
