@@ -330,15 +330,16 @@ const TaskInput = ({ onCreateTask }) => {
 
   // Enhanced icon components
   const TurtleIcon = () => (
-    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12 2C8.7 2 6 4.7 6 8v2c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2V8c0-3.3-2.7-6-6-6zm0 2c2.2 0 4 1.8 4 4v2H8V8c0-2.2 1.8-4 4-4z"/>
-      <circle cx="10" cy="8" r="1"/>
-      <circle cx="14" cy="8" r="1"/>
+    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 18c-4 0-8-2-8-6V8c0-2.2 1.8-4 4-4s4 1.8 4 4c0-2.2 1.8-4 4-4s4 1.8 4 4v4c0 4-4 6-8 6z"/>
+      <path d="M8 8c0-1.1.9-2 2-2s2 .9 2 2-2 2-2 2-2-.9-2-2z"/>
+      <path d="M14 8c0-1.1.9-2 2-2s2 .9 2 2-2 2-2 2-2-.9-2-2z"/>
+      <path d="M6 10h2v2H6zm10 0h2v2h-2z"/>
     </svg>
   );
 
   const WarningIcon = () => (
-    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
       <path d="M12 2L1 22h22L12 2zm0 3.5L20.5 20h-17L12 5.5z"/>
       <circle cx="12" cy="16" r="1"/>
       <path d="M12 10v4"/>
@@ -346,7 +347,7 @@ const TaskInput = ({ onCreateTask }) => {
   );
 
   const DropperIcon = () => (
-    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
       <path d="M17.7 3.3c-.4-.4-1-.4-1.4 0L12 7.6 8.7 4.3c-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4L10.6 9l-7.3 7.3c-.4.4-.4 1 0 1.4.2.2.4.3.7.3s.5-.1.7-.3L12 10.4l7.3 7.3c.2.2.4.3.7.3s.5-.1.7-.3c.4-.4.4-1 0-1.4L13.4 9l3.3-3.3c.4-.4.4-1 0-1.4z"/>
       <circle cx="18" cy="6" r="2"/>
     </svg>
