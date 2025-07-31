@@ -289,7 +289,7 @@ const ParticleExplosion = ({ x, y, onComplete }) => {
   );
 };
 
-// Task Input Component - Ultra Fast
+// Task Input Component - Enhanced with new icons
 const TaskInput = ({ onCreateTask }) => {
   const [text, setText] = useState('');
   const [priority, setPriority] = useState('LOW');
@@ -328,29 +328,49 @@ const TaskInput = ({ onCreateTask }) => {
     setShowColorPicker(false);
   };
 
+  // Enhanced icon components
+  const TurtleIcon = () => (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2C8.7 2 6 4.7 6 8v2c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2V8c0-3.3-2.7-6-6-6zm0 2c2.2 0 4 1.8 4 4v2H8V8c0-2.2 1.8-4 4-4z"/>
+      <circle cx="10" cy="8" r="1"/>
+      <circle cx="14" cy="8" r="1"/>
+    </svg>
+  );
+
+  const WarningIcon = () => (
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2L1 22h22L12 2zm0 3.5L20.5 20h-17L12 5.5z"/>
+      <circle cx="12" cy="16" r="1"/>
+      <path d="M12 10v4"/>
+    </svg>
+  );
+
+  const DropperIcon = () => (
+    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M17.7 3.3c-.4-.4-1-.4-1.4 0L12 7.6 8.7 4.3c-.4-.4-1-.4-1.4 0-.4.4-.4 1 0 1.4L10.6 9l-7.3 7.3c-.4.4-.4 1 0 1.4.2.2.4.3.7.3s.5-.1.7-.3L12 10.4l7.3 7.3c.2.2.4.3.7.3s.5-.1.7-.3c.4-.4.4-1 0-1.4L13.4 9l3.3-3.3c.4-.4.4-1 0-1.4z"/>
+      <circle cx="18" cy="6" r="2"/>
+    </svg>
+  );
+
   const PriorityIcon = () => {
     if (priority === 'HIGH') {
       return (
         <div className="w-8 h-8 bg-red-500 rounded-xl flex items-center justify-center">
-          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
+          <WarningIcon />
         </div>
       );
     } else {
       return (
         <div className="w-8 h-8 bg-blue-500 rounded-xl flex items-center justify-center">
-          <div className="w-3 h-3 bg-white rounded-full"></div>
+          <TurtleIcon />
         </div>
       );
     }
   };
 
-  const PaintbrushIcon = () => (
+  const ColorPickerIcon = () => (
     <div className="relative">
-      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-      </svg>
+      <DropperIcon />
       <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${colors.find(c => c.name === selectedColor)?.color} border border-black`}></div>
     </div>
   );
@@ -416,18 +436,18 @@ const TaskInput = ({ onCreateTask }) => {
               onClick={() => setShowColorPicker(!showColorPicker)}
               className="p-2 rounded-xl"
             >
-              <PaintbrushIcon />
+              <ColorPickerIcon />
             </button>
             
             {showColorPicker && (
-              <div className="absolute bottom-full mb-2 right-0 bg-black/90 rounded-xl p-3 border border-white/20">
-                <div className="grid grid-cols-4 gap-2">
+              <div className="absolute bottom-full mb-2 right-0 bg-black/90 rounded-xl p-4 border border-white/20">
+                <div className="grid grid-cols-2 gap-3">
                   {colors.map(color => (
                     <button
                       key={color.name}
                       type="button"
                       onClick={() => setSelectedColor(color.name)}
-                      className={`w-8 h-8 rounded-full ${color.color} ${
+                      className={`w-10 h-10 rounded-full ${color.color} transition-transform hover:scale-110 ${
                         selectedColor === color.name ? 'ring-2 ring-white ring-offset-2 ring-offset-black/50' : ''
                       }`}
                     />
