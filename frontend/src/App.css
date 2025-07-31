@@ -25,6 +25,12 @@ body {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
+/* Enhanced blur effect for focus mode */
+.blur-sm {
+  filter: blur(4px);
+  transition: filter 0.2s ease;
+}
+
 .resize-handle {
   z-index: 10;
 }
@@ -56,9 +62,10 @@ body {
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* Instant focus mode */
+/* Enhanced focus mode with blur */
 .opacity-30 {
   opacity: 0.3;
+  transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
 /* Custom date input styling */
@@ -86,7 +93,7 @@ button {
   transition: none;
 }
 
-/* Drag particle animation */
+/* Enhanced drag particle animation */
 @keyframes fadeOutParticle {
   0% {
     opacity: 1;
@@ -96,4 +103,34 @@ button {
     opacity: 0;
     transform: scale(0) translateY(-20px);
   }
+}
+
+/* Gradient border hover animation */
+.task-card-container .gradient-border {
+  background: linear-gradient(135deg, var(--gradient-color), black 50%);
+  transition: background 0.3s ease;
+}
+
+.task-card-container:hover .gradient-border {
+  background: linear-gradient(225deg, var(--gradient-color), black 70%);
+}
+
+/* Bomb explosion keyframes */
+@keyframes bombExplosion {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+.bomb-explosion {
+  animation: bombExplosion 0.6s ease-out forwards;
 }
