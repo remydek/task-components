@@ -7,13 +7,14 @@ import './App.css';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-// Task Card Component - Optimized for Speed
+// Task Card Component - Enhanced with all improvements
 const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [resizeStart, setResizeStart] = useState({ x: 0, y: 0, width: 0, height: 0 });
+  const [dragParticles, setDragParticles] = useState([]);
 
   const colorGradients = {
     red: 'from-red-500 to-black',
@@ -59,11 +60,33 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
     });
   };
 
+  // Create drag particles
+  const createDragParticle = (x, y) => {
+    const particle = {
+      id: Date.now() + Math.random(),
+      x: x,
+      y: y,
+      life: 1
+    };
+    setDragParticles(prev => [...prev, particle]);
+    
+    // Remove particle after animation
+    setTimeout(() => {
+      setDragParticles(prev => prev.filter(p => p.id !== particle.id));
+    }, 500);
+  };
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (isDragging && !isResizing) {
         const newX = Math.max(0, e.clientX - dragStart.x);
         const newY = Math.max(0, e.clientY - dragStart.y);
+        
+        // Create subtle drag particles
+        if (Math.random() < 0.3) { // 30% chance
+          createDragParticle(e.clientX, e.clientY);
+        }
+        
         onUpdate(task.id, { x: newX, y: newY });
       } else if (isResizing) {
         const deltaX = e.clientX - resizeStart.x;
@@ -90,10 +113,41 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
     };
   }, [isDragging, isResizing, dragStart, resizeStart, task.id, onUpdate]);
 
+  // SVG Icons
+  const WarningIcon = () => (
+    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2L1 22h22L12 2zm0 3.5L20.5 20h-17L12 5.5z"/>
+      <circle cx="12" cy="16" r="1"/>
+      <path d="M12 10v4"/>
+    </svg>
+  );
+
+  const TurtleIcon = () => (
+    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2C8.7 2 6 4.7 6 8v2c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2V8c0-3.3-2.7-6-6-6zm0 2c2.2 0 4 1.8 4 4v2H8V8c0-2.2 1.8-4 4-4z"/>
+      <circle cx="10" cy="8" r="1"/>
+      <circle cx="14" cy="8" r="1"/>
+    </svg>
+  );
+
+  const BombIcon = () => (
+    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+      <path d="M18 6l2-2M16 4l2-2M20 8l2-2"/>
+      <circle cx="12" cy="10" r="2"/>
+    </svg>
+  );
+
+  const DeleteIcon = () => (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+    </svg>
+  );
+
   return (
     <div
       className={`absolute select-none cursor-move task-card-container ${
-        isBlurred ? 'opacity-30' : ''
+        isBlurred ? 'opacity-30 blur-sm' : ''
       }`}
       style={{
         left: task.x,
@@ -107,8 +161,15 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Gradient border container */}
-      <div className={`h-full p-[2px] rounded-3xl bg-gradient-to-br ${colorGradients[task.color]}`}>
+      {/* Enhanced gradient border with hover effect */}
+      <div 
+        className={`h-full p-[2px] rounded-3xl bg-gradient-to-br ${colorGradients[task.color]} transition-all duration-200`}
+        style={{
+          background: isHovered 
+            ? `linear-gradient(135deg, var(--tw-gradient-from), black 70%)`
+            : undefined
+        }}
+      >
         {/* Inner card content */}
         <div className="h-full bg-black/80 rounded-3xl overflow-hidden flex flex-col">
           {/* Header */}
@@ -119,10 +180,8 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
             </div>
             {task.priority === 'HIGH' && (
               <div className={`flex items-center text-xs font-medium ${priorityColors[task.color]}`}>
-                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-                High
+                <WarningIcon />
+                <span className="ml-1">High</span>
               </div>
             )}
           </div>
@@ -148,9 +207,7 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
                 onDelete(task.id);
               }}
             >
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
+              <DeleteIcon />
             </button>
             <button
               className="action-button p-2 hover:bg-white/10 rounded-lg"
@@ -159,18 +216,16 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
                 onComplete(task.id);
               }}
             >
-              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <BombIcon />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Instant resize handle */}
+      {/* Enhanced resize handle with rounded corners */}
       {isHovered && (
         <div
-          className="resize-handle absolute -bottom-3 -right-3 w-8 h-8 cursor-nw-resize opacity-100"
+          className="resize-handle absolute -bottom-3 -right-3 w-8 h-8 cursor-nw-resize opacity-100 rounded-full"
           onMouseDown={handleResizeStart}
         >
           <div className="w-full h-full bg-white/15 rounded-full border border-white/20 flex items-center justify-center shadow-lg">
@@ -178,6 +233,19 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
           </div>
         </div>
       )}
+
+      {/* Drag particles */}
+      {dragParticles.map(particle => (
+        <div
+          key={particle.id}
+          className="absolute w-1 h-1 bg-white/40 rounded-full pointer-events-none"
+          style={{
+            left: particle.x - task.x,
+            top: particle.y - task.y,
+            animation: 'fadeOutParticle 0.5s ease-out forwards'
+          }}
+        />
+      ))}
     </div>
   );
 };
