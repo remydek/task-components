@@ -164,11 +164,11 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
     >
       {/* Enhanced gradient border with hover effect */}
       <div 
-        className={`h-full p-[2px] rounded-3xl bg-gradient-to-br ${colorGradients[task.color]} transition-all duration-200`}
+        className={`h-full p-[2px] rounded-3xl transition-all duration-300`}
         style={{
           background: isHovered 
-            ? `linear-gradient(135deg, var(--tw-gradient-from), black 70%)`
-            : undefined
+            ? `linear-gradient(225deg, ${task.color === 'red' ? '#ef4444' : task.color === 'teal' ? '#14b8a6' : task.color === 'blue' ? '#3b82f6' : task.color === 'green' ? '#22c55e' : task.color === 'yellow' ? '#eab308' : task.color === 'pink' ? '#ec4899' : task.color === 'lightblue' ? '#0ea5e9' : '#a855f7'}, black 70%)`
+            : `linear-gradient(135deg, ${task.color === 'red' ? '#ef4444' : task.color === 'teal' ? '#14b8a6' : task.color === 'blue' ? '#3b82f6' : task.color === 'green' ? '#22c55e' : task.color === 'yellow' ? '#eab308' : task.color === 'pink' ? '#ec4899' : task.color === 'lightblue' ? '#0ea5e9' : '#a855f7'}, black 50%)`
         }}
       >
         {/* Inner card content */}
