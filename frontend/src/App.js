@@ -332,10 +332,13 @@ const TaskInput = ({ onCreateTask }) => {
   // Enhanced icon components
   const TurtleIcon = () => (
     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12 18c-4 0-8-2-8-6V8c0-2.2 1.8-4 4-4s4 1.8 4 4c0-2.2 1.8-4 4-4s4 1.8 4 4v4c0 4-4 6-8 6z"/>
-      <path d="M8 8c0-1.1.9-2 2-2s2 .9 2 2-2 2-2 2-2-.9-2-2z"/>
-      <path d="M14 8c0-1.1.9-2 2-2s2 .9 2 2-2 2-2 2-2-.9-2-2z"/>
-      <path d="M6 10h2v2H6zm10 0h2v2h-2z"/>
+      <ellipse cx="12" cy="14" rx="8" ry="4"/>
+      <ellipse cx="12" cy="10" rx="6" ry="3"/>
+      <circle cx="9" cy="9" r="1"/>
+      <circle cx="15" cy="9" r="1"/>
+      <ellipse cx="7" cy="12" rx="1.5" ry="1"/>
+      <ellipse cx="17" cy="12" rx="1.5" ry="1"/>
+      <ellipse cx="12" cy="7" rx="2" ry="1"/>
     </svg>
   );
 
