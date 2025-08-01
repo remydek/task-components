@@ -115,7 +115,7 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
 
   // SVG Icons
   const WarningIcon = () => (
-    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
       <path d="M12 2L1 22h22L12 2zm0 3.5L20.5 20h-17L12 5.5z"/>
       <circle cx="12" cy="16" r="1"/>
       <path d="M12 10v4"/>
@@ -123,15 +123,16 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
   );
 
   const TurtleIcon = () => (
-    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M12 2C8.7 2 6 4.7 6 8v2c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-6c0-1.1-.9-2-2-2V8c0-3.3-2.7-6-6-6zm0 2c2.2 0 4 1.8 4 4v2H8V8c0-2.2 1.8-4 4-4z"/>
-      <circle cx="10" cy="8" r="1"/>
-      <circle cx="14" cy="8" r="1"/>
+    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 18c-4 0-8-2-8-6V8c0-2.2 1.8-4 4-4s4 1.8 4 4c0-2.2 1.8-4 4-4s4 1.8 4 4v4c0 4-4 6-8 6z"/>
+      <path d="M8 8c0-1.1.9-2 2-2s2 .9 2 2-2 2-2 2-2-.9-2-2z"/>
+      <path d="M14 8c0-1.1.9-2 2-2s2 .9 2 2-2 2-2 2-2-.9-2-2z"/>
+      <path d="M6 10h2v2H6zm10 0h2v2h-2z"/>
     </svg>
   );
 
   const BombIcon = () => (
-    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
       <path d="M12 2c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
       <path d="M18 6l2-2M16 4l2-2M20 8l2-2"/>
       <circle cx="12" cy="10" r="2"/>
@@ -139,7 +140,7 @@ const TaskCard2D = ({ task, onUpdate, onDelete, onComplete, isBlurred }) => {
   );
 
   const DeleteIcon = () => (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
     </svg>
   );
